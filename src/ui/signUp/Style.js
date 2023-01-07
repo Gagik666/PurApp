@@ -1,0 +1,80 @@
+import { Dimensions, StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: "#26294C",
+    alignItems: "center",
+  },
+  viewTitle: {
+    width: Dimensions.get("window").width,
+    paddingStart: 24,
+  },
+  txtTitle: {
+    color: "#FFF",
+    width: "90%",
+    marginBottom: 16,
+    fontWeight: "600",
+    fontSize: 32,
+    height: 48,
+  },
+  form: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    backgroundColor: "#CED2E9",
+    borderTopStartRadius: 50,
+    borderTopEndRadius: 50,
+  },
+  viewFormTitle: {
+    width: Dimensions.get("window").width,
+    paddingStart: 24,
+    paddingTop: 24,
+  },
+  txtFormTitle: {
+    fontWeight: "800",
+    fontSize: 35,
+    lineHeight: 43,
+    color: "#26294C",
+  },
+  txtInput: {
+    fontSize: 16,
+    fontWeight: "500",
+    lineHeight: 19,
+    width: "85%",
+    backgroundColor: "#F6F6F6",
+    height: 50,
+    padding: 10,
+    marginTop: 24,
+    borderRadius: 50,
+    shadowColor: "black",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 6 },
+  },
+  viewInput: {
+    width: Dimensions.get("window").width,
+    alignItems: "center",
+  },
+  btnReg: {
+    marginTop: 30,
+    height: 50,
+    paddingHorizontal: 30,
+    backgroundColor: "#26294C",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 50,
+  },
+  txtReg: {
+    color: "#FFF",
+    fontWeight: "700",
+    fontSize: 18,
+    lineHeight: 24,
+  },
+  btnLoginNow: {
+    fontWeight: "600",
+    fontSize: 18,
+    lineHeight: 27,
+    color: "#26294C",
+  },
+  btnEye: { marginTop: -48, marginStart: "70%", padding: 10 },
+});
