@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#26294C",
     borderBottomEndRadius: 40,
     borderBottomStartRadius: 40,
+    
   },
   image: {
     width: 120,

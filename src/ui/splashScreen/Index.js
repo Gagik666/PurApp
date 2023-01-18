@@ -4,18 +4,22 @@ import React, { useEffect } from "react";
 import { Text, View } from "react-native";
 import { styles } from "./Style";
 import * as Location from "expo-location";
-import { useDispatch } from "react-redux";
-import { addCompanyLocation } from "../signUp/components/modal/reducer";
-import { editCurrentUser } from "../../firebase/reducer";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addLocation,
+  editCompanyData,
+} from "../signUp/components/modal/reducer";
+import { editCurrentUser, selectCurrentUser } from "../../firebase/reducer";
 import { onValue, ref } from "firebase/database";
 import { db } from "../../firebase";
 export const SplashScreen = () => {
   const navigation = useNavigation();
+  const currentUser = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
   useEffect(() => {
     getSkip();
     getLocation();
-  });
+  },[]);
 
   const getLocation = async () => {
     try {
@@ -23,7 +27,8 @@ export const SplashScreen = () => {
       const {
         coords: { latitude, longitude },
       } = await Location.getCurrentPositionAsync();
-      dispatch(addCompanyLocation(latitude, longitude));
+      dispatch(addLocation(latitude, longitude));
+      console.log(latitude, longitude);
     } catch (error) {
       console.log(error);
     }
@@ -63,9 +68,18 @@ export const SplashScreen = () => {
     }
   };
 
-  const loading =  (uid) => {
+  const loading = (uid) => {
     onValue(ref(db, "/users/" + uid), (r) => {
       dispatch(editCurrentUser(r.val()));
+      setTimeout(() => {
+        loadingCompany(r.val().company);
+      }, 3000);
+    });
+  };
+
+  const loadingCompany = (companyName) => {
+    onValue(ref(db, "/company/" + companyName), (r) => {
+      dispatch(editCompanyData(r.val()));
     });
   };
 

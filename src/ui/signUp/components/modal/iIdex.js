@@ -10,7 +10,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   editModalVisivle,
-  selectCompanyList,
   selectModalVisible,
 } from "../../../../components/switch/reduser";
 import { styles } from "./Style";
@@ -20,7 +19,7 @@ import { editCompanyName, selectCompany } from "./reducer";
 export const ModalWidow = () => {
   const dispatch = useDispatch();
   const modalVisible = useSelector(selectModalVisible);
-  const company = useSelector(selectCompany)
+  const company = useSelector(selectCompany);
   const closeModal = () => {
     dispatch(editModalVisivle(false));
   };
@@ -35,7 +34,9 @@ export const ModalWidow = () => {
           <Ionicons name="chevron-back" size={30} color="black" />
         </TouchableOpacity>
         <FlatList
-          data={company.companyList.filter((item, index) => company.companyList.indexOf(item) === index)}
+          data={company.companyList.filter(
+            (item, index) => company.companyList.indexOf(item) === index
+          )}
           renderItem={({ item }) => (
             <View style={{ alignItems: "center" }}>
               <View style={styles.itemView}>
@@ -52,7 +53,7 @@ export const ModalWidow = () => {
                   <TouchableOpacity
                     onPress={() => {
                       dispatch(editCompanyName(item)),
-                      dispatch(editModalVisivle(false));
+                        dispatch(editModalVisivle(false));
                     }}
                   >
                     <Text style={styles.txtAdd}>+</Text>

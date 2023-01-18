@@ -11,13 +11,15 @@ export const userReducer = (state = {}, action) => {
 
 export const initialUser = {
   currentUser: {},
-  workerList: []
 };
 
 export const selectCurrentUser = (state) => state.user.currentUser;
+
 
 export const editCurrentUser = (val) => {
   return (dispatch) => {
     return dispatch({ type: "addCurentUser", val });
   };
 };
+
+

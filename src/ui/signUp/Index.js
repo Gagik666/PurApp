@@ -34,13 +34,16 @@ import {
   selectSvitch,
   selectUser,
 } from "../../components/switch/reduser";
-import { selectCompany } from "./components/modal/reducer";
+import { addLocation, selectCompany } from "./components/modal/reducer";
 // import { selectCurentLat, selectCurentLong } from "../splashScreen/reduser";
 import { logOut } from "../../components/header/reduser";
 import { editCurrentUser } from "../../firebase/reducer";
+import { getDate } from "../../extensions/Time/Time";
+import * as Location from "expo-location";
+import { Loading } from "../../components/loading/Index";
+import { editLoading } from "../../components/loading/reducer";
 
 export const SignUp = () => {
-   
   const [eye, setEye] = useState({ secret: true, icone: "eye" });
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -65,26 +68,35 @@ export const SignUp = () => {
 
   const addUserData = (userName, email, company, uid) => {
     set(ref(db, "users/" + uid), {
+      uid: uid,
       userName: userName,
       email: email,
       company: company,
       user: user,
-      status: "isAbsent",
+      isAbsent: false,
+      isPresent: false,
       day: 0,
       dayRating: 1,
       countDay: 0,
-      rating: 1,
-    }).then(() => {
-      setToken(uid, user);
-      loading(uid)
-      initialSwitch ? createCompanyLocation(company) : null;
-      initialSwitch
-        ? navigation.navigate("Manager")
-        : navigation.navigate("Worker");
-    });
+    })
+      .then(() => {
+        setToken(uid, user);
+        loading(uid);
+        initialSwitch
+          ? createCompanyLocation(company)
+          : creatUserInfo(uid, userName, email),
+          creatUserRating(uid, userName, email);
+        initialSwitch
+          ? navigation.navigate("Manager")
+          : navigation.navigate("Worker");
+        dispatch(editLoading("none"));
+      })
+      .catch(() => {
+        dispatch(editLoading("none"));
+      });
   };
-  
-  const loading =  (uid) => {
+
+  const loading = (uid) => {
     onValue(ref(db, "/users/" + uid), (r) => {
       dispatch(editCurrentUser(r.val()));
     });
@@ -99,16 +111,47 @@ export const SignUp = () => {
     }
   };
 
+  const getLocation = async () => {
+    try {
+      await Location.requestForegroundPermissionsAsync();
+      const {
+        coords: { latitude, longitude },
+      } = await Location.getCurrentPositionAsync();
+      dispatch(addLocation(latitude, longitude));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const createCompanyLocation = (companyN) => {
     set(ref(db, "company/" + companyN), {
       companyName: companyN,
-      latitude: company.latitude,
-      longitude: company.longitude,
+      latitude: company.currentLatitude,
+      longitude: company.currentLongitude,
+    });
+  };
+
+  const creatUserInfo = (uid, userName, email) => {
+    set(ref(db, "usersInfo/" + `${uid}/` + `${getDate()}`), {
+      userName: userName,
+      email: email,
+      timeICame: `_ _ : _ _`,
+      timeIWent: `_ _ : _ _`,
+      worked: `_ _ : _ _`,
+      FullDate: `_ . _ . _`,
+    });
+  };
+  const creatUserRating = (uid, userName, email) => {
+    set(ref(db, "usersRating/" + `${uid}/` + `${getDate()}`), {
+      userName: userName,
+      email: email,
+      rating: 0,
     });
   };
 
   return (
     <View style={styles.wrapper}>
+      <Loading />
       <View style={styles.viewTitle}>
         <Text style={styles.txtTitle}>Create Account!</Text>
       </View>
@@ -122,23 +165,16 @@ export const SignUp = () => {
         }}
         validateOnBlur
         onSubmit={(values, { resetForm }) => {
-          
           resetForm({ values: "" });
-          // dispatch(
-          //   addData(values.userName, values.email, user, values.companyName)
-          // );
-          // dispatch(
-          //   editCompany(
-          //     initialSwitch ? values.companyName : currentUser.company
-          //   )
-          // );
           creatUser(
             values.userName,
             values.email,
             values.password,
             initialSwitch ? values.companyName : company.companyName
           );
+          getLocation();
           dispatch(logOut(false));
+          dispatch(editLoading("flex"));
         }}
         validationSchema={validation}
       >

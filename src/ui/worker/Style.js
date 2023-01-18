@@ -6,4 +6,10 @@ export const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
     },
+    viewStatus: {
+        width: "100%",
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "space-evenly"
+    }
 })

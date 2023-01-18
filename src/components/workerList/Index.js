@@ -1,39 +1,57 @@
+import { useNavigation } from "@react-navigation/native";
 import { onValue, ref } from "firebase/database";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../firebase";
+import { selectCurrentUser } from "../../firebase/reducer";
 import { WorkerItem } from "./components/workerItem/Index";
+import { editWorkerList, selectWorkers } from "./reduser";
 import { styles } from "./Style";
 
 export const WorkerList = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const workers = useSelector(selectWorkers);
+  const currentUser = useSelector(selectCurrentUser);
+
+  useEffect(() => {
+    getWorkers();
+  }, [currentUser.company]);
+
   const getWorkers = () => {
     const dbRef = ref(db, "/users/");
     onValue(dbRef, (res) => {
       res.forEach((childRes) => {
         if (
           childRes.val().user == "Worker" &&
-          company == childRes.val().company
+          currentUser.company == childRes.val().company
         ) {
-          console.log(childRes.val());
-          // dispatch(
-          //   add(
-          //     childRes.val().user,
-          //     childRes.val().userName,
-          //     childRes.val().email
-          //   )
-          // );
+          dispatch(editWorkerList(childRes.val()));
         }
       });
     });
   };
 
+  const openUserInfo = (uid) => {
+    navigation.navigate("WorkerInfo", {
+      uid: uid,
+    });
+  };
+
   return (
     <View style={styles.wrapper}>
-      
-      {/* <FlatList
-        // data={workers}
-        renderItem={({ item }) => <WorkerItem item={item} />}
-      /> */}
+      <FlatList
+        keyExtractor={(item) => item.uid}
+        data={workers.filter((item, index, arr) => {
+          return arr.map((i) => i.uid).indexOf(item.uid) === index;
+        })}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => openUserInfo(item.uid)}>
+            <WorkerItem item={item} />
+          </TouchableOpacity>
+        )}
+      />
     </View>
   );
 };

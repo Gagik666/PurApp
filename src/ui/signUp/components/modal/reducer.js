@@ -5,11 +5,16 @@ export const modalReducer = (state = {}, action) => {
         ...state,
         companyName: action.companyName,
       };
-     case "addCompanyLocation": 
+     case "addLocation": 
      return {
         ...state,
-        latitude: action.latitude,
-        longitude: action.longitude
+        currentLatitude: action.latitude,
+        currentLongitude: action.longitude
+     } 
+     case "editCompanyData": 
+     return {
+        ...state,
+        companyData: action.data,
      } 
      case "addCompany": 
      return {
@@ -23,22 +28,30 @@ export const modalReducer = (state = {}, action) => {
 
 export const initialModal = {
   companyName: "",
-  latitude: 1,
-  longitude: 2,
+  currentLatitude: 1,
+  currentLongitude: 2,
+  companyData: {},
   companyList: []
 };
 
 export const selectCompany = (state) => state.modal;
-
+export const selectCompanyData = state => state.modal.companyData
 export const editCompanyName = (companyName) => {
   return (dispatch) => {
     return dispatch({ type: "editCompanyName", companyName });
   };
 };
 
-export const addCompanyLocation = (latitude, longitude) => {
+ 
+
+export const addLocation = (latitude, longitude) => {
   return (dispatch) => {
-    return dispatch({ type: "addCompanyLocation", latitude, longitude });
+    return dispatch({ type: "addLocation", latitude, longitude });
+  };
+};
+export const editCompanyData = (data) => {
+  return (dispatch) => {
+    return dispatch({ type: "editCompanyData", data });
   };
 };
 

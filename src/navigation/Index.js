@@ -6,18 +6,20 @@ import { SplashScreen } from "../ui/splashScreen/Index";
 import { Manager } from "../ui/manager/Index";
 import { SignIn } from "../ui/signIn/Index";
 import { Worker } from "../ui/worker/Index";
+import { WorkerInfo } from "../ui/workerInfo/Index";
+import { StatistickInfo } from "../ui/statistickInfo/Index";
 const Stack = createNativeStackNavigator();
 
 export const Navigate = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName  = "SplashScreen" >
+      <Stack.Navigator initialRouteName="SplashScreen">
         <Stack.Screen
-            name="SplashScreen"
-            component={SplashScreen}
-            options={{
-                header: (props) => null,
-              }}
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{
+            header: (props) => null,
+          }}
         />
         <Stack.Screen
           name="Intru"
@@ -52,6 +54,20 @@ export const Navigate = () => {
           component={Worker}
           options={{
             title: " ",
+          }}
+        />
+        <Stack.Screen
+          name = "WorkerInfo"
+          component={WorkerInfo}
+          options = {{
+            title: " "
+          }}
+        />
+        <Stack.Screen
+          name = "StatistickInfo"
+          component={StatistickInfo}
+          options = {{
+            title: " "
           }}
         />
       </Stack.Navigator>

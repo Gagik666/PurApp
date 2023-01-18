@@ -24,7 +24,6 @@ export const Manager = () => {
         <Header />
         <UserInfo />
         <WorkerList />
-        <Text style={{ fontSize: 32 }}>manager</Text>
       </LinearGradient>
     </>
   );

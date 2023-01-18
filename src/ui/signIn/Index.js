@@ -19,6 +19,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logOut } from "../../components/header/reduser";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { editCurrentUser, selectCurrentUser } from "../../firebase/reducer";
+import { Loading } from "../../components/loading/Index";
+import { editLoading } from "../../components/loading/reducer";
 
 export const SignIn = () => {
   const dispatch = useDispatch();
@@ -35,17 +37,21 @@ export const SignIn = () => {
       signInWithEmailAndPassword(auth, email, password).then(
         (userCredential) => {
           loading(userCredential.user.uid);
-          setToken(userCredential.user.uid, currentUser.user);
           dispatch(logOut(false));
-          navigation.navigate(currentUser.user)
+          dispatch(editLoading("none"))
+          
         }
-      );
+      ).catch(() => {
+        dispatch(editLoading("none"))
+      });
     } catch (error) {}
   };
 
   const loading = (uid) => {
     onValue(ref(db, "/users/" + uid), (r) => {
       dispatch(editCurrentUser(r.val()));
+      navigation.navigate(r.val().user)
+      setToken(uid, r.val().user);
     });
   };
 
@@ -60,6 +66,7 @@ export const SignIn = () => {
 
   return (
     <View style={styles.wrapper}>
+      <Loading />
       <View style={styles.viewTitle}>
         <Text style={styles.txtTitle}>Velcome Back!</Text>
       </View>
@@ -74,6 +81,7 @@ export const SignIn = () => {
         onSubmit={(values, { resetForm }) => {
           resetForm({ values: "" });
           loginUser(values.email, values.password);
+          dispatch(editLoading("flex"))
         }}
         validationSchema={validation}
       >
