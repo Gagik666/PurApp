@@ -10,6 +10,11 @@ export const WorkerInfoReducer = (state = {}, action) => {
           ...state,
           workers: [...state.workers, action.worker]
         }
+    case "resetWorkerList":
+        return {
+          ...state,
+          workers: []
+        }
     default:
       return state;
   }
@@ -20,6 +25,11 @@ export const selectWorkers = state => state.workerList.workers
 export const editWorkerList = (worker) => {
   return (dispatch) => {
     return dispatch({type: "editWorkerList", worker})
+  }
+}
+export const resetWorkerList = (worker) => {
+  return (dispatch) => {
+    return dispatch({type: "resetWorkerList", worker})
   }
 }
 

@@ -19,11 +19,15 @@ export const SplashScreen = () => {
   useEffect(() => {
     getSkip();
     getLocation();
-  },[]);
+  }, []);
 
   const getLocation = async () => {
     try {
-      await Location.requestForegroundPermissionsAsync();
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
       const {
         coords: { latitude, longitude },
       } = await Location.getCurrentPositionAsync();

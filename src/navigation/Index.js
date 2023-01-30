@@ -8,6 +8,7 @@ import { SignIn } from "../ui/signIn/Index";
 import { Worker } from "../ui/worker/Index";
 import { WorkerInfo } from "../ui/workerInfo/Index";
 import { StatistickInfo } from "../ui/statistickInfo/Index";
+import { Map } from "../ui/map/Index";
 const Stack = createNativeStackNavigator();
 
 export const Navigate = () => {
@@ -32,42 +33,49 @@ export const Navigate = () => {
           name="SignUp"
           component={SignUp}
           options={{
-            title: " ",
+            header: (props) => null,
           }}
         />
         <Stack.Screen
           name="SignIn"
           component={SignIn}
           options={{
-            title: " ",
+            header: (props) => null,
           }}
         />
         <Stack.Screen
           name="Manager"
           component={Manager}
           options={{
-            title: " ",
+            header: (props) => null,
           }}
         />
         <Stack.Screen
           name="Worker"
           component={Worker}
           options={{
-            title: " ",
+            header: (props) => null,
           }}
         />
         <Stack.Screen
           name = "WorkerInfo"
           component={WorkerInfo}
           options = {{
-            title: " "
+            header: (props) => null,
           }}
         />
         <Stack.Screen
           name = "StatistickInfo"
           component={StatistickInfo}
           options = {{
-            title: " "
+            header: (props) => null,
+          }}
+        />
+        <Stack.Screen
+          name = "Map"
+          component={Map}
+          options = {{
+            header: (props) => null,
           }}
         />
       </Stack.Navigator>

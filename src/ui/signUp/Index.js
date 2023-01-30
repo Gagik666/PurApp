@@ -44,9 +44,18 @@ import { Loading } from "../../components/loading/Index";
 import { editLoading } from "../../components/loading/reducer";
 
 export const SignUp = () => {
+
+
+
   const [eye, setEye] = useState({ secret: true, icone: "eye" });
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
+
+  useEffect(() => {
+    dispatch(logOut(false));
+  }, [])
+
   const inputhVisible = useSelector(selectInputVisible);
   const initialSwitch = useSelector(selectSvitch);
   const user = useSelector(selectUser);
@@ -84,8 +93,7 @@ export const SignUp = () => {
         loading(uid);
         initialSwitch
           ? createCompanyLocation(company)
-          : creatUserInfo(uid, userName, email),
-          creatUserRating(uid, userName, email);
+          : creatUserInfo(uid, userName, email)
         initialSwitch
           ? navigation.navigate("Manager")
           : navigation.navigate("Worker");
@@ -139,12 +147,6 @@ export const SignUp = () => {
       timeIWent: `_ _ : _ _`,
       worked: `_ _ : _ _`,
       FullDate: `_ . _ . _`,
-    });
-  };
-  const creatUserRating = (uid, userName, email) => {
-    set(ref(db, "usersRating/" + `${uid}/` + `${getDate()}`), {
-      userName: userName,
-      email: email,
       rating: 0,
     });
   };

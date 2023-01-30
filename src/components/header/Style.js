@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
     container: {
         backgroundColor: "#26294C",
         width: "100%",
-        paddingTop: 40,
+        paddingTop: Platform.OS === "ios" ? 50 : 10,
         paddingHorizontal: 16,
         flexDirection: "row",
         justifyContent: "space-between",

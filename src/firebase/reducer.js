@@ -15,11 +15,8 @@ export const initialUser = {
 
 export const selectCurrentUser = (state) => state.user.currentUser;
 
-
 export const editCurrentUser = (val) => {
   return (dispatch) => {
     return dispatch({ type: "addCurentUser", val });
   };
 };
-
-

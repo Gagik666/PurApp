@@ -1,21 +1,26 @@
-let d = new Date();
+
 
 const addLeadingZero = (d) => {
   return d < 10 ? `0` + d : d;
 };
 export const getMinutes = () => {
+  let d = new Date();
   return addLeadingZero(d.getMinutes());
 };
 export const getHours = () => {
+  let d = new Date();
   return addLeadingZero(d.getHours());
 };
 export const getDate = () => {
+  let d = new Date();
   return addLeadingZero(d.getDate());
 };
 export const getMonth = () => {
+  let d = new Date();
   return addLeadingZero(d.getMonth() + 1);
 };
 export const getFullYear = () => {
+  let d = new Date();
   return addLeadingZero(d.getFullYear());
 };
 

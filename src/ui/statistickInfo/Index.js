@@ -47,10 +47,13 @@ export const StatistickInfo = () => {
             <td>Visit</td>
             <td>Finish</td>
             <td>Worked</td>
+            <td>Rating</td>
           </tr>
         </tbody>
         
-        ${workerStatistickList.map(
+        ${workerStatistickList.filter((item, index, arr) => {
+          return arr.map((e) => e.FullDate).indexOf(item.FullDate) === index;
+        }).map(
           (i) =>
             `<tbody> 
                 <tr>
@@ -58,6 +61,7 @@ export const StatistickInfo = () => {
                   <td>${i.timeICame}</td>
                   <td>${i.timeIWent}</td>
                   <td>${i.worked}</td>
+                  <td>${i.rating}</td>
                 </tr>
               </tbody>`
         )}
@@ -67,8 +71,8 @@ export const StatistickInfo = () => {
   </html>`);
   };
 
-  let generatedPdf = async () => {
-    const file = await printToFileAsync({
+  const generatedPdf = async () => {
+    let file = await printToFileAsync({
       html: getHtml(),
       base64: false,
     });

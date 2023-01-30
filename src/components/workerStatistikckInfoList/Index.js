@@ -23,6 +23,9 @@ export const WorkerStatisticInfoList = () => {
           <View style={styles.column}>
             <Text>Worked</Text>
           </View>
+          <View style={styles.column}>
+            <Text>Rating</Text>
+          </View>
         </View>
       </View>
       <View style={{ width: "100%" }}>
@@ -43,6 +46,9 @@ export const WorkerStatisticInfoList = () => {
               </View>
               <View style={styles.column}>
                 <Text>{item.worked}</Text>
+              </View>
+              <View style={styles.column}>
+                <Text>{item.rating}</Text>
               </View>
             </View>
           )}

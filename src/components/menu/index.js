@@ -1,18 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { editMenuDisplay, logOut, selectMenuDisplay } from "../header/reduser";
+import { changeLocation, editMenuDisplay, logOut, selectMenuDisplay } from "../header/reduser";
 import { styles } from "./Style";
 import { Ionicons } from "@expo/vector-icons";
 import { MenuButton } from "./components/button/Index";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { selectCurrentUser } from "../../firebase/reducer";
-
+import { editWorkerList, resetWorkerList } from "../workerList/reduser";
 
 export const Menu = () => {
   const menuDispalay = useSelector(selectMenuDisplay);
+  const [displayButton, setDisplayButton] = useState("flex");
   const dispatch = useDispatch();
+
   const currentUser = useSelector(selectCurrentUser);
+
+  useEffect(() => {
+    if (currentUser.user === "Manager") {
+      setDisplayButton("flex");
+    } else {
+      setDisplayButton("none")
+    }
+  }, [currentUser]);
+
+
   const setToken = async (uid, user) => {
     try {
       await AsyncStorage.setItem("token", uid);
@@ -26,7 +38,13 @@ export const Menu = () => {
     dispatch(editMenuDisplay("none"));
     dispatch(logOut(true));
     setToken("null", "null");
+    dispatch(resetWorkerList(null))
   };
+
+  const changeLocationPres = () => {
+    dispatch(changeLocation(true))
+    dispatch(editMenuDisplay("none"));
+  }
   return (
     <>
       <TouchableOpacity
@@ -58,9 +76,17 @@ export const Menu = () => {
             </View>
           </View>
           <View style={styles.menuBottom}>
-            <MenuButton text="Edit profile" />
-            <MenuButton text="Change location" />
-            <MenuButton text="About us" />
+            <MenuButton text="Edit profile"  />
+            <View
+              style={{
+                alignItems: "center",
+                width: "100%",
+                display: displayButton,
+              }}
+            >
+              <MenuButton text="Change location"  click={changeLocationPres}/>
+            </View>
+            <MenuButton text="About us"/>
             <MenuButton text="Log out" display="none" click={logOutPress} />
             <MenuButton text="Delete account" display="none" />
           </View>

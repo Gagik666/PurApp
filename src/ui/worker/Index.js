@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { View, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Header } from "../../components/header/Index";
 import { UserInfo } from "../../components/userInfo/Index";
@@ -29,47 +29,56 @@ import {
 import { getDistance } from "geolib";
 import { WorkerButton } from "./components/button/Index";
 import { editStatusButton, workerStatus } from "./reducer";
+import { useBackHandler } from "@react-native-community/hooks";
 
 export const Worker = () => {
+  useBackHandler(
+    useCallback(() => {
+      () => null;
+      return true;
+    })
+  );
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const logOut = useSelector(selectlogOut);
-  logOut ? navigation.navigate("SignIn") : null;
+  logOut ? navigation.navigate("SignUp") : null;
   const currentUser = useSelector(selectCurrentUser);
   const current = useSelector(selectCompany);
   const companyData = useSelector(selectCompanyData);
   const button = useSelector(workerStatus);
+  const [display, setDisplay] = useState("none")
   useEffect(() => {
-    setTimeout(() => {
-      updateStatus();
-    }, 300);
-  });
+    updateStatus();
+  }, [currentUser]);
 
   const updateDay = async () => {
-    getLocation();
+    if (distance() > 41) {
+      setDisplay("flex")
+    } else {
+      setDisplay("none")
+    }
     console.log(distance());
+    getLocation();
     try {
       const uid = await AsyncStorage.getItem("token");
-      if (
-        currentUser.day !== getDate() &&
-        distance() <= 30
-      ) {
+      if (currentUser.day !== getDate() && distance() <= 40) {
         update(ref(db, "/users/" + uid), {
           countDay: currentUser.countDay + 1,
           day: getDate(),
-          isPresent : true
+          isPresent: true,
         });
         iCame(uid);
         dispatch(editStatusButton("I wint", "flex"));
       } else if (
         currentUser.day === getDate() &&
-        distance() <= 30 &&
+        distance() <= 40 &&
         currentUser.isPresent === true
       ) {
         dispatch(editStatusButton("I wint", "none"));
         update(ref(db, "/users/" + uid), {
           day: getDate(),
-          isAbsent : true
+          isAbsent: true,
         });
         iWent(uid);
       }
@@ -90,23 +99,26 @@ export const Worker = () => {
         }
         if (currentUser.isPresent === true && currentUser.isAbsent === true) {
           dispatch(editStatusButton("I wint", "none"));
-        } 
+        }
       }
       if (currentUser.day !== getDate()) {
-        if (currentUser.isPresent === true && currentUser.isAbsent === true) {
+        if (currentUser.isPresent === true || currentUser.isAbsent === true) {
           update(ref(db, "/users/" + uid), {
-            isAbsent : false,
-            isPresent: false
-
+            isAbsent: false,
+            isPresent: false,
           });
         }
-      }  
+      }
     } catch (error) {}
   };
 
   const getLocation = async () => {
     try {
-      await Location.requestForegroundPermissionsAsync();
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
       const {
         coords: { latitude, longitude },
       } = await Location.getCurrentPositionAsync();
@@ -134,6 +146,7 @@ export const Worker = () => {
       email: currentUser.email,
       timeIWent: `_ _ : _ _`,
       worked: `0:0`,
+      rating: 0,
     });
   };
 
@@ -166,7 +179,7 @@ export const Worker = () => {
         update(ref(db, "usersInfo/" + `${uid}/` + `${day[0]}`), {
           worked: `${hours}:${minuts}`,
         });
-      }, 5000);
+      }, 1000);
     });
   };
 
@@ -180,12 +193,14 @@ export const Worker = () => {
         <UserInfo />
         <View style={styles.viewStatus}>
           <Statistick countDay={currentUser.countDay} />
-
-          <WorkerButton
-            text={button.text}
-            display={button.display}
-            click={updateDay}
-          />
+          <View style = {{alignItems: "center"}}>
+            <WorkerButton
+              text={button.text}
+              display={button.display}
+              click={updateDay}
+            />
+            <Text style={{marginTop: 16, fontSize: 20, color: "#ff0000", display: display}}>You are not in the area</Text>
+          </View>
         </View>
       </LinearGradient>
     </>

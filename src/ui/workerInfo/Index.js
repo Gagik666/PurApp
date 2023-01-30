@@ -11,12 +11,10 @@ import { onValue, ref, update } from "firebase/database";
 import { db } from "../../firebase";
 import {
   editBtnRating,
-  editSaveRatingContainer,
   editSaveRatingDisplay,
   editWorkerItem,
   editWorkerStatistickList,
   selectBtnRating,
-  selectRatingContainer,
   selectSaveRating,
   selectWorkerItem,
 } from "./reducer";
@@ -24,6 +22,7 @@ import { Statistick } from "../../components/statistick/Index";
 import Slider from "@react-native-community/slider";
 import { getDate } from "../../extensions/Time/Time";
 import { selectCurrentUser } from "../../firebase/reducer";
+import { Rating } from "../../components/Rating/Index";
 
 export const WorkerInfo = () => {
   const dispatch = useDispatch();
@@ -34,7 +33,6 @@ export const WorkerInfo = () => {
   const [rating, setRating] = useState(0);
   const logOut = useSelector(selectlogOut);
   const navigation = useNavigation();
-  const ratingContainer = useSelector(selectRatingContainer);
   logOut ? navigation.navigate("SignUp") : null;
 
   onValue(ref(db, "users/" + `${route.params.uid}/`), (r) => {
@@ -54,46 +52,57 @@ export const WorkerInfo = () => {
       }, 1000);
     });
   };
+
+  useEffect(() => {
+    if (rating === 0) {
+      dispatch(editBtnRating("none"));
+    } else {
+      dispatch(editBtnRating("flex"));
+    }
+  }, [rating]);
+
   useEffect(() => {
     onValue(ref(db, "users/" + `${route.params.uid}/`), (r) => {
-      if (r.val().day !== getDate()) {
+      if (r.val().day === getDate()) {
+        setTimeout(() => {
+          onValue(ref(db, "usersInfo/" + `${route.params.uid}/` + `${getDate()}`), (r) => {
+            if (r.val().rating === 0) {
+              dispatch(editSaveRatingDisplay("flex"));
+            } else {
+              dispatch(editSaveRatingDisplay("none"));
+            }
+          });
+        }, 1000);
+       
+      } else {
         dispatch(editSaveRatingDisplay("none"));
-      } else {
-        dispatch(editSaveRatingDisplay("flex"));
-      }
-      if (rating === 0) {
-        dispatch(editBtnRating("none"));
-      } else {
-        dispatch(editBtnRating("flex"));
       }
     });
 
-    onValue(ref(db, "/usersInfo/" + workerItem.uid), (r) => {
-      setTimeout(() => {
-        r.forEach((i) => {
-          if (i.key == getDate()) {
-            onValue(
-              ref(db, "usersRating/" + `${route.params.uid}/` + `${getDate()}`),
-              (r) => {
-                if (r.val().rating > 0) {
-                  dispatch(editSaveRatingContainer("none"));
-                }
-              }
-            );
-          }
-        });
-      }, 1000);
-    });
-  });
+    // onValue(ref(db, "/usersInfo/" + workerItem.uid), (r) => {
+    //   setTimeout(() => {
+    //     r.forEach((i) => {
+    //       if (i.key == getDate()) {
+    //         onValue(
+    //           ref(db, "usersRating/" + `${route.params.uid}/` + `${getDate()}`),
+    //           (r) => {
+    //             if (r.val().rating > 0) {
+    //               dispatch(editSaveRatingContainer("none"));
+    //             }
+    //           }
+    //         );
+    //       }
+    //     });
+    //   }, 1000);
+    // });
+  }, []);
 
   const saveRating = () => {
-    update(ref(db, "usersRating/" + `${route.params.uid}/` + `${getDate()}`), {
+    update(ref(db, "usersInfo/" + `${route.params.uid}/` + `${getDate()}`), {
       rating: rating,
     }).then(() => {
       navigation.navigate("Manager");
     });
-
-    
   };
   return (
     <>
@@ -103,6 +112,7 @@ export const WorkerInfo = () => {
       >
         <Header />
         <WorkerItem val={workerItem} />
+        
         <View
           style={{
             flex: 1,
@@ -111,25 +121,24 @@ export const WorkerInfo = () => {
             alignItems: "center",
           }}
         >
+          <Rating uid = {route.params.uid} />
           <Statistick countDay={workerItem.countDay} />
-          <View style={[styles.ratingView, { display: ratingContainer }]}>
-            <View style={[styles.ratingView, { display: saveRatingDisplay }]}>
-              <Text>{rating}</Text>
-              <Slider
-                style={styles.slider}
-                onValueChange={(value) => {
-                  setRating(Math.floor(value));
-                }}
-                minimumValue={1}
-                maximumValue={5}
-              />
-              <TouchableOpacity
-                style={{ display: btnRating }}
-                onPress={() => saveRating()}
-              >
-                <Text>Save</Text>
-              </TouchableOpacity>
-            </View>
+          <View style={[styles.ratingView, { display: saveRatingDisplay }]}>
+            <Text>{rating}</Text>
+            <Slider
+              style={styles.slider}
+              onValueChange={(value) => {
+                setRating(Math.floor(value));
+              }}
+              minimumValue={1}
+              maximumValue={5}
+            />
+            <TouchableOpacity
+              style={{ display: btnRating }}
+              onPress={() => saveRating()}
+            >
+              <Text>Save</Text>
+            </TouchableOpacity>
           </View>
 
           <View style={{ width: "100%", alignItems: "center" }}>

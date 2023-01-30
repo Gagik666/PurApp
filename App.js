@@ -1,4 +1,4 @@
-import { StatusBar } from "expo-status-bar";
+import { StatusBar } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
 import { Provider } from "react-redux";
 import { Menu } from "./src/components/menu";
@@ -8,6 +8,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <>
+      <StatusBar
+      barStyle= "light-content"
+      />
         <Navigate />
         <Menu />
       </>

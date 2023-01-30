@@ -5,6 +5,7 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../firebase";
 import { selectCurrentUser } from "../../firebase/reducer";
+import { editRatingList } from "../../ui/workerInfo/reducer";
 import { WorkerItem } from "./components/workerItem/Index";
 import { editWorkerList, selectWorkers } from "./reduser";
 import { styles } from "./Style";
@@ -37,6 +38,7 @@ export const WorkerList = () => {
     navigation.navigate("WorkerInfo", {
       uid: uid,
     });
+    dispatch(editRatingList(null))
   };
 
   return (

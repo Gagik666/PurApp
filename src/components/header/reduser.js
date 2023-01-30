@@ -2,7 +2,8 @@
 
 export const initialHeader = {
   menuDisplay: "none",
-  logOut: false
+  logOut: false,
+  changeLocation: false
 };
 
 export const headerReduser = (state = {}, action) => {
@@ -17,6 +18,11 @@ export const headerReduser = (state = {}, action) => {
         ...state,
         logOut: action.payload.logOut
       }
+      case "changeLocation": 
+      return {
+        ...state,
+        changeLocation: action.payload.changeLocation
+      }
     default:
       return state;
   }
@@ -27,6 +33,9 @@ export const selectMenuDisplay = (state) => {
 };
 export const selectlogOut = (state) => {
   return state.header.logOut
+}
+export const selectChangeLocation = (state) => {
+  return state.header.changeLocation
 }
 
 export const editMenuDisplay = (display) => {
@@ -43,6 +52,14 @@ export const logOut = (val) => {
     type: "logOut",
     payload: {
       logOut: val
+    }
+  }
+}
+export const changeLocation = (val) => {
+  return {
+    type: "changeLocation",
+    payload: {
+      changeLocation: val
     }
   }
 }

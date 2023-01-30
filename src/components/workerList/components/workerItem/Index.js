@@ -5,6 +5,17 @@ import { styles } from "./Style";
 
 export const WorkerItem = ({item}) => {
 
+  useEffect(() => {
+    
+    if(item.isPresent === true) {
+      setStatus("Present")
+    } else if (item.isAbsent == true) {
+      setStatus("Absent")
+    } 
+
+  }, [])
+
+  const [status, setStatus] = useState("")
   return (
     <View style={styles.container}>
       <View style={styles.itemView}>
@@ -15,7 +26,7 @@ export const WorkerItem = ({item}) => {
           />
         </View>
         <View style={styles.textView}>
-          <Text style={{}}>{item.status}</Text>
+          <Text style={{}}>{status}</Text>
           <Text style={styles.txtUserName}>{item.userName}</Text>
           <Text style={styles.txtEmail}>{item.email}</Text>
         </View>
