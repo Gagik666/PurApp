@@ -17,15 +17,7 @@ import { Switch } from "../../components/switch/Index";
 import { ModalWidow } from "./components/modal/iIdex";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-// import {
-//   addData,
-//   addUser,
-//   editCompany,
-//   editUserId,
-//   selectCurrentUser,
-//   selectCUser,
-//   selectUser,
-// } from "../../db/firebase/reduser";
+
 import { onValue, ref, set } from "firebase/database";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -35,7 +27,6 @@ import {
   selectUser,
 } from "../../components/switch/reduser";
 import { addLocation, selectCompany } from "./components/modal/reducer";
-// import { selectCurentLat, selectCurentLong } from "../splashScreen/reduser";
 import { logOut } from "../../components/header/reduser";
 import { editCurrentUser } from "../../firebase/reducer";
 import { getDate } from "../../extensions/Time/Time";
@@ -87,6 +78,7 @@ export const SignUp = () => {
       day: 0,
       dayRating: 1,
       countDay: 0,
+      imgUrl: "https://firebasestorage.googleapis.com/v0/b/pourapp-c2b3e.appspot.com/o/users%2Fperson.png?alt=media&token=3ed2d1ea-9d1b-4440-bfc8-8e5e8cb2a33e"
     })
       .then(() => {
         setToken(uid, user);

@@ -36,6 +36,7 @@ export const SignIn = () => {
     try {
       signInWithEmailAndPassword(auth, email, password).then(
         (userCredential) => {
+        console.log(userCredential);
           loading(userCredential.user.uid);
           dispatch(logOut(false));
           dispatch(editLoading("none"))

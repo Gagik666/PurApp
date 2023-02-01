@@ -3,7 +3,10 @@ import { Text, TouchableOpacity, View } from "react-native";
 import MapView, { Circle, Marker } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import { changeLocation } from "../../components/header/reduser";
-import { addLocation, selectCompany, selectCompanyData } from "../signUp/components/modal/reducer";
+import {
+  selectCompany,
+  selectCompanyData,
+} from "../signUp/components/modal/reducer";
 import { styles } from "./Style";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -15,28 +18,28 @@ import { selectCurrentUser } from "../../firebase/reducer";
 export const Map = () => {
   const dispatch = useDispatch();
   const companyData = useSelector(selectCompanyData);
-  const currentUser = useSelector(selectCurrentUser)
+  const currentUser = useSelector(selectCurrentUser);
   const current = useSelector(selectCompany);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   useEffect(() => {
     dispatch(changeLocation(false));
   }, []);
 
-  const [latitude, setLatitude] = useState(companyData.latitude,);
+  const [latitude, setLatitude] = useState(companyData.latitude);
   const [longitude, setLongitude] = useState(companyData.longitude);
 
   const change = () => {
     update(ref(db, "company/" + currentUser.company), {
       latitude: latitude,
-      longitude: longitude
+      longitude: longitude,
     });
   };
   const autocorrect = () => {
     update(ref(db, "company/" + currentUser.company), {
       latitude: current.currentLatitude,
-      longitude: current.currentLongitude
+      longitude: current.currentLongitude,
     });
-    navigation.navigate("Manager")
+    navigation.navigate("Manager");
   };
 
   return (
@@ -55,7 +58,7 @@ export const Map = () => {
           style={styles.map}
           initialRegion={{
             latitude: companyData.latitude,
-            longitude: companyData.longitude ,
+            longitude: companyData.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
@@ -73,19 +76,16 @@ export const Map = () => {
         </MapView>
 
         <View style={styles.viewBottom}>
-        <TouchableOpacity
-          style={styles.touchChange}
-          onPress={() => change()}
-        >
-          <Text style={styles.btnStyle}>Change Location</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.touchChange}
-          onPress={() => autocorrect()}
-        >
-          <Text style={styles.btnStyle}>Location autocorrect</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity style={styles.touchChange} onPress={() => change()}>
+            <Text style={styles.btnStyle}>Change Location</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.touchChange}
+            onPress={() => autocorrect()}
+          >
+            <Text style={styles.btnStyle}>Location autocorrect</Text>
+          </TouchableOpacity>
+        </View>
       </LinearGradient>
     </>
   );

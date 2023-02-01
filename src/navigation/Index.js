@@ -9,6 +9,7 @@ import { Worker } from "../ui/worker/Index";
 import { WorkerInfo } from "../ui/workerInfo/Index";
 import { StatistickInfo } from "../ui/statistickInfo/Index";
 import { Map } from "../ui/map/Index";
+import { EditProfile } from "../ui/editProfile/Index";
 const Stack = createNativeStackNavigator();
 
 export const Navigate = () => {
@@ -74,6 +75,13 @@ export const Navigate = () => {
         <Stack.Screen
           name = "Map"
           component={Map}
+          options = {{
+            header: (props) => null,
+          }}
+        />
+        <Stack.Screen
+          name = "EditProfile"
+          component={EditProfile}
           options = {{
             header: (props) => null,
           }}

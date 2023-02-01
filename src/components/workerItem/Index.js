@@ -17,7 +17,7 @@ export const WorkerItem = ({val}) => {
       <View style={styles.imageView}>
         <Image
           style={styles.image}
-          source={require("../../../assets/person.png")}
+          source={{uri: val.imgUrl}}
         />
       </View>
         <View style={styles.textView}>

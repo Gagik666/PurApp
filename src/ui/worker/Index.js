@@ -6,7 +6,7 @@ import { UserInfo } from "../../components/userInfo/Index";
 import { styles } from "./Style";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { selectlogOut } from "../../components/header/reduser";
+import { selectEditProfile, selectlogOut } from "../../components/header/reduser";
 
 import { onValue, ref, update } from "firebase/database";
 import {
@@ -42,7 +42,9 @@ export const Worker = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const logOut = useSelector(selectlogOut);
+  const editProfile = useSelector(selectEditProfile)
   logOut ? navigation.navigate("SignUp") : null;
+  editProfile ? navigation.navigate("EditProfile") : null;
   const currentUser = useSelector(selectCurrentUser);
   const current = useSelector(selectCompany);
   const companyData = useSelector(selectCompanyData);
@@ -51,6 +53,8 @@ export const Worker = () => {
   useEffect(() => {
     updateStatus();
   }, [currentUser]);
+
+ 
 
   const updateDay = async () => {
     if (distance() > 41) {

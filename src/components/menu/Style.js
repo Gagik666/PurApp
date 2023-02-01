@@ -38,6 +38,8 @@ export const styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: "#383A69",
     marginEnd: 15,
+    backgroundColor: "#fff",
+    resizeMode: "center"
   },
   menuUserInfo: {
     width: "80%",

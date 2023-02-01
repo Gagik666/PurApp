@@ -22,7 +22,7 @@ export const WorkerItem = ({item}) => {
         <View style={styles.imageView}>
           <Image
             style={styles.image}
-            source={require("../../../../../assets/person.png")}
+            source={{uri: item.imgUrl}}
           />
         </View>
         <View style={styles.textView}>

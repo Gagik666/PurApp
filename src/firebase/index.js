@@ -22,4 +22,3 @@ export const db = getDatabase(app);
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-export { firebase };

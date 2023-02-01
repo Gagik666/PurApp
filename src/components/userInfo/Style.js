@@ -16,6 +16,8 @@ export const styles = StyleSheet.create({
     height: 120,
     borderWidth: 5,
     borderRadius: 100,
+    backgroundColor: "#fff",
+    resizeMode: "center"
   },
   imageView: {
     justifyContent: "center",

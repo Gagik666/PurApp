@@ -17,8 +17,12 @@ export const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderWidth: 5,
+    padding: 50,
     borderRadius: 100,
     borderColor: "#383A69",
+    backgroundColor: "#fff",
+    resizeMode: "center"
+    
   },
   imageView: {
     justifyContent: "center",

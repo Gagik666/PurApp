@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { changeLocation, editMenuDisplay, logOut, selectMenuDisplay } from "../header/reduser";
+import {
+  changeLocation,
+  editMenuDisplay,
+  editProfile,
+  logOut,
+  selectMenuDisplay,
+} from "../header/reduser";
 import { styles } from "./Style";
 import { Ionicons } from "@expo/vector-icons";
 import { MenuButton } from "./components/button/Index";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { selectCurrentUser } from "../../firebase/reducer";
-import { editWorkerList, resetWorkerList } from "../workerList/reduser";
+import { resetWorkerList } from "../workerList/reduser";
 
 export const Menu = () => {
   const menuDispalay = useSelector(selectMenuDisplay);
@@ -20,10 +26,9 @@ export const Menu = () => {
     if (currentUser.user === "Manager") {
       setDisplayButton("flex");
     } else {
-      setDisplayButton("none")
+      setDisplayButton("none");
     }
   }, [currentUser]);
-
 
   const setToken = async (uid, user) => {
     try {
@@ -38,13 +43,19 @@ export const Menu = () => {
     dispatch(editMenuDisplay("none"));
     dispatch(logOut(true));
     setToken("null", "null");
-    dispatch(resetWorkerList(null))
+    dispatch(resetWorkerList(null));
   };
 
   const changeLocationPres = () => {
-    dispatch(changeLocation(true))
+    dispatch(changeLocation(true));
     dispatch(editMenuDisplay("none"));
-  }
+  };
+
+  const editProfilePres = () => {
+    dispatch(editProfile(true));
+    dispatch(editMenuDisplay("none"));
+  };
+
   return (
     <>
       <TouchableOpacity
@@ -66,7 +77,7 @@ export const Menu = () => {
             <View style={styles.menuUserInfo}>
               <Image
                 style={styles.image}
-                source={require("../../../assets/person.png")}
+                source={{ uri: currentUser.imgUrl }}
               />
               <View>
                 <Text></Text>
@@ -76,7 +87,7 @@ export const Menu = () => {
             </View>
           </View>
           <View style={styles.menuBottom}>
-            <MenuButton text="Edit profile"  />
+            <MenuButton text="Edit profile" click={editProfilePres} />
             <View
               style={{
                 alignItems: "center",
@@ -84,9 +95,9 @@ export const Menu = () => {
                 display: displayButton,
               }}
             >
-              <MenuButton text="Change location"  click={changeLocationPres}/>
+              <MenuButton text="Change location" click={changeLocationPres} />
             </View>
-            <MenuButton text="About us"/>
+            <MenuButton text="About us" />
             <MenuButton text="Log out" display="none" click={logOutPress} />
             <MenuButton text="Delete account" display="none" />
           </View>

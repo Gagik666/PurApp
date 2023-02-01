@@ -82,7 +82,7 @@ export const StatistickInfo = () => {
 
   return (
     <View style={styles.container}>
-      <Header />
+      <Header backClic = { () => navigation.goBack()}/>
       <WorkerItem val={workerItem} />
       {/* <View style={styles.header}>
         <View style={styles.viewTop}>

@@ -104,13 +104,14 @@ export const WorkerInfo = () => {
       navigation.navigate("Manager");
     });
   };
+
   return (
     <>
       <LinearGradient
         colors={["#181A20", "#B0B9E6", "#CED2E9"]}
         style={styles.wrapper}
       >
-        <Header />
+        <Header backClic = { () => navigation.goBack()}/>
         <WorkerItem val={workerItem} />
         
         <View

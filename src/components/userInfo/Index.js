@@ -11,7 +11,7 @@ export const UserInfo = () => {
       <View style={styles.imageView}>
         <Image
           style={styles.image}
-          source={require("../../../assets/person.png")}
+          source={{uri: currentUser.imgUrl}}
         />
       </View>
       <View style={styles.textView}>

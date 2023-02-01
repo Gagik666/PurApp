@@ -3,7 +3,8 @@
 export const initialHeader = {
   menuDisplay: "none",
   logOut: false,
-  changeLocation: false
+  changeLocation: false,
+  editProfile: false,
 };
 
 export const headerReduser = (state = {}, action) => {
@@ -23,6 +24,11 @@ export const headerReduser = (state = {}, action) => {
         ...state,
         changeLocation: action.payload.changeLocation
       }
+      case "editProfile": 
+      return {
+        ...state,
+        editProfile: action.payload.editProfile
+      }
     default:
       return state;
   }
@@ -36,6 +42,9 @@ export const selectlogOut = (state) => {
 }
 export const selectChangeLocation = (state) => {
   return state.header.changeLocation
+}
+export const selectEditProfile= (state) => {
+  return state.header.editProfile
 }
 
 export const editMenuDisplay = (display) => {
@@ -60,6 +69,14 @@ export const changeLocation = (val) => {
     type: "changeLocation",
     payload: {
       changeLocation: val
+    }
+  }
+}
+export const editProfile = (val) => {
+  return {
+    type: "editProfile",
+    payload: {
+      editProfile: val
     }
   }
 }

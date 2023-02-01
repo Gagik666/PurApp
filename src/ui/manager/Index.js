@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import {
   selectChangeLocation,
+  selectEditProfile,
   selectlogOut,
 } from "../../components/header/reduser";
 import { useBackHandler } from "@react-native-community/hooks";
@@ -17,14 +18,12 @@ import { StatusBar } from "react-native";
 export const Manager = () => {
   const logOut = useSelector(selectlogOut);
   const changeLocation = useSelector(selectChangeLocation);
+  const editProfile = useSelector(selectEditProfile);
   const navigation = useNavigation();
   logOut ? navigation.navigate("SignUp") : null;
   changeLocation ? navigation.navigate("Map") : null;
-
-  useBackHandler(useCallback(() => {
-    () => null
-  }))
-
+  editProfile ? navigation.navigate("EditProfile") : null;
+  
   return (
     <>
       
@@ -32,7 +31,7 @@ export const Manager = () => {
         colors={["#181A20", "#B0B9E6", "#CED2E9"]}
         style={styles.wrapper}
       >
-        <Header />
+        <Header backClic = {() => {}} />
         <UserInfo />
         <WorkerList />
       </LinearGradient>
